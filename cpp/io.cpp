@@ -11,7 +11,7 @@ fieldReal io::readReal(const string& filename, int column){
 
   int fSizeUpScale = 0;
 
-  uint32_t nx, ny;
+  size_t nx, ny;
   double dummy, value, Lx, Ly;
   string str;
   char dummyChar; //used to hold the "#" character in array.old
@@ -19,8 +19,8 @@ fieldReal io::readReal(const string& filename, int column){
   configIn >> dummyChar >> Lx >> Ly;
 
   fieldReal arrayR(nx, ny, Lx, Ly);
-  for (uint32_t ix = 0; ix < nx; ix++){
-    for (uint32_t iy = 0; iy < ny; iy++){
+  for (size_t ix = 0; ix < nx; ix++){
+    for (size_t iy = 0; iy < ny; iy++){
       for (int i = 1; i < column; ++i) configIn >> dummy; // skip other columns 
       configIn >> value; getline(configIn, str);
       arrayR.at(ix,iy) = value;
@@ -46,7 +46,7 @@ void io::writeReal(const string& filename, fieldReal& arrayR, int xStep, int ySt
 
   // fields are 1D in y direction
   if(arrayR.nx==1) {
-    for (uint32_t iy=0; iy <= arrayR.ny; iy+=yStep) {
+    for (size_t iy=0; iy <= arrayR.ny; iy+=yStep) {
       output << iy*dy; 
       output << "\t" << arrayR[iy];
       output << "\n"; 
@@ -55,7 +55,7 @@ void io::writeReal(const string& filename, fieldReal& arrayR, int xStep, int ySt
   
   // fields are 1D in x direction (this should not happen!)
   else if (arrayR.ny==1) {
-    for (uint32_t ix=0; ix <= arrayR.nx; ix+=xStep) {
+    for (size_t ix=0; ix <= arrayR.nx; ix+=xStep) {
       output << ix*dx;
       output << "\t" << arrayR[ix];
       output << "\n"; 
@@ -64,11 +64,10 @@ void io::writeReal(const string& filename, fieldReal& arrayR, int xStep, int ySt
   
   // fields are 2D
   else {
-    for (uint32_t ix=0; ix <= arrayR.nx; ix+=xStep) {
-      for (uint32_t iy=0; iy <= arrayR.ny; iy+=yStep) {
-        uint32_t k = (ix%arrayR.nx)*arrayR.ny + (iy%arrayR.ny);
+    for (size_t ix=0; ix <= arrayR.nx; ix+=xStep) {
+      for (size_t iy=0; iy <= arrayR.ny; iy+=yStep) {
         output << ix*dx << "\t" << iy*dy;
-        output << "\t" << arrayR[k];
+        output << "\t" << arrayR.pbc(ix,iy);
         output << "\n";
       } 
       output << "\n"; // add empty line

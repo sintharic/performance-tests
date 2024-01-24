@@ -17,7 +17,6 @@ private:
   fftw_plan RIFFT;
 
 public:
-  const size_t size;
   const size_t nx, ny;
   const double Lx, Ly;
 
@@ -33,12 +32,17 @@ public:
     return self[ix*ny + iy];
   }
 
-  inline double& pbc(int32_t ix, int32_t iy) {
+  inline double& pbc(int64_t ix, int64_t iy) {
+    #ifdef DEBUG
+      if (ix < (int64_t) -nx) cerr << "x-index out of range\n";
+      if (iy < (int64_t) -ny) cerr << "y-index out of range\n";
+    #endif
     ix = (ix + nx)%nx;
     iy = (iy + ny)%ny;
     return self[ix*ny + iy];
   }
 
+  size_t size();
   fieldReal(size_t nx, size_t ny, double Lx, double Ly);
   fieldReal(size_t nx, size_t ny, double Lx, double Ly, double val);
   
@@ -64,7 +68,6 @@ private:
   vector<uint8_t> weight;
 
 public:
-  const size_t size;
   const size_t nx, ny;
   const double Lx, Ly;
 
@@ -87,12 +90,17 @@ public:
     return self[ix*nyHP1 + iy];
   }
 
-  inline Complex& pbc(int32_t ix, int32_t iy) {
+  inline Complex& pbc(int64_t ix, int64_t iy) {
+    #ifdef DEBUG
+      if (ix < (int64_t) -nx/2) cerr << "x-index out of range\n";
+      if (iy < (int64_t) -ny/2) cerr << "y-index out of range\n";
+    #endif
     ix = (ix + nx)%nx;
     iy = (iy + nyHP1)%nyHP1;
     return self[ix*nyHP1 + iy];
   }
 
+  size_t size();
   fieldFour(size_t nx, size_t ny, double Lx, double Ly);
   fieldFour(size_t nx, size_t ny, double Lx, double Ly, Complex val);
   
