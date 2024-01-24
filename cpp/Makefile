@@ -1,10 +1,10 @@
 SHELL = /usr/bin/env bash
-default_target: all
+default_target: main.exe
 
 COMPILER := g++
 CPPFLAGS := -O2 -std=c++11
 #WFLAGS   := -Wno-unused-command-line-argument -Wno-shift-count-overflow -Wno-unused-result
-OBJECTS  := fields.o fft.o io.o topo.o stats.o generate.o
+OBJECTS  := fields.o io.o main.o
 opts     :=
 
 # Current date (for backups)
@@ -74,36 +74,21 @@ LFFTW := -lfftw3 -L $(FFTW_LIB) -I $(FFTW_INC)
 
 # ----- compilation rules ----- #
 
-fields.o: header.h fields.cpp
+fields.o: header.h fields.h fields.cpp
 	@echo " compiling fields.o ..."
-	@$(COMPILER) $(CPPFLAGS) $(opts) -c fields.cpp -o fields.o > error.log 2>&1
+	@$(COMPILER) $(CPPFLAGS) $(LFFTW) $(opts) -c fields.cpp -o fields.o > error.log 2>&1
 
-io.o: header.h io.cpp
+io.o: header.h io.h io.cpp
 	@echo " compiling io.o ..."
-	@$(COMPILER) $(CPPFLAGS) $(opts) -c io.cpp -o io.o > error.log 2>&1
+	@$(COMPILER) $(CPPFLAGS) $(LFFTW) $(opts) -c io.cpp -o io.o > error.log 2>&1
 
-fft.o: header.h fft.cpp
-	@echo " ---$(MSG) ---"
-	@echo " FFTW Paths: - $(FFTW_LIB)"
-	@echo "             - $(FFTW_INC)"
-	@echo " compiling fft.o ..."
-	@$(COMPILER) $(CPPFLAGS) $(opts) $(LFFTW) -c fft.cpp -o fft.o > error.log 2>&1
+main.o: header.h main.h main.cpp
+	@echo " compiling main.o ..."
+	@$(COMPILER) $(CPPFLAGS) $(LFFTW) $(opts) -c main.cpp -o main.o > error.log 2>&1
 
-topo.o: header.h topo.cpp
-	@echo " compiling topo.o ..."
-	@$(COMPILER) $(CPPFLAGS) $(opts) $(LFFTW) -c topo.cpp -o topo.o > error.log 2>&1
-
-stats.o: header.h stats.cpp
-	@echo " compiling stats.o ..."
-	@$(COMPILER) $(CPPFLAGS) $(opts) -c stats.cpp -o stats.o > error.log 2>&1
-
-generate.o: header.h generate.cpp
-	@echo " compiling generate.o ..."
-	@$(COMPILER) $(CPPFLAGS) $(opts) -c generate.cpp -o generate.o > error.log 2>&1
-
-all: $(OBJECTS)
-	@echo " compiling generate.exe ..."
-	@$(COMPILER) $(CPPFLAGS) $(opts) $(OBJECTS) $(LFFTW) -o ../generate.exe > error.log 2>&1
+main.exe: $(OBJECTS)
+	@echo " compiling main.exe ..."
+	@$(COMPILER) $(CPPFLAGS) $(LFFTW) $(opts) $(OBJECTS) $(LFFTW) -o main.exe > error.log 2>&1
 
 
 cln:

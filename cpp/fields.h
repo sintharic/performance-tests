@@ -14,16 +14,16 @@ class fieldFour;
 class fieldReal {
 private:
   std::vector<double> self;
-  fftw_plan IFTplan;
+  fftw_plan RIFFT;
 
 public:
   const size_t size;
   const size_t nx, ny;
   const double Lx, Ly;
 
-  inline size_t get_lin_idx(size_t ix, size_t iy) { return(ix*ny+iy); };
-  inline size_t get_ix(size_t k) { return k/ny; }
-  inline size_t get_iy(size_t k) { return k%ny; }
+  inline size_t lin_idx(size_t ix, size_t iy) { return(ix*ny+iy); };
+  inline size_t x_idx(size_t k) { return k/ny; }
+  inline size_t y_idx(size_t k) { return k%ny; }
 
   inline double& at(size_t ix, size_t iy) {
     #ifdef DEBUG
@@ -51,7 +51,7 @@ public:
   std::vector<double>::iterator begin();
   std::vector<double>::iterator end();
 
-  void fromIFT(fieldFour&);
+  void fromFT(fieldFour&);
 };
 
 
@@ -60,7 +60,7 @@ class fieldFour {
 private:
   std::vector<Complex> self;
   const size_t nyHP1;
-  fftw_plan FTplan;
+  fftw_plan RFFT;
   vector<uint8_t> weight;
 
 public:
@@ -68,9 +68,9 @@ public:
   const size_t nx, ny;
   const double Lx, Ly;
 
-  inline size_t get_lin_idx(size_t ix, size_t iy) { return(ix*nyHP1+iy); };
-  inline size_t get_iqx(size_t k) { return k/nyHP1; }
-  inline size_t get_iqy(size_t k) { return k%nyHP1; }
+  inline size_t lin_idx(size_t ix, size_t iy) { return(ix*nyHP1+iy); };
+  inline size_t qx_idx(size_t k) { return k/nyHP1; }
+  inline size_t qy_idx(size_t k) { return k%nyHP1; }
   inline size_t get_abs_iqx(size_t k){ 
     size_t jqx = k/nyHP1;
     if (jqx > nx/2) jqx = nx - jqx;

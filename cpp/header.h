@@ -13,6 +13,5 @@
 using namespace std;
 typedef complex<double> Complex;
 
-#define DEBUG
 
 #endif //HEADER_H

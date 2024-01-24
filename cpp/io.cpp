@@ -12,12 +12,13 @@ fieldReal io::readReal(const string& filename, int column){
   int fSizeUpScale = 0;
 
   uint32_t nx, ny;
-  double dummy, value;
+  double dummy, value, Lx, Ly;
   string str;
   char dummyChar; //used to hold the "#" character in array.old
   configIn >> dummyChar >> nx >> ny;
+  configIn >> dummyChar >> Lx >> Ly;
 
-  fieldReal arrayR(nx, ny);
+  fieldReal arrayR(nx, ny, Lx, Ly);
   for (uint32_t ix = 0; ix < nx; ix++){
     for (uint32_t iy = 0; iy < ny; iy++){
       for (int i = 1; i < column; ++i) configIn >> dummy; // skip other columns 
@@ -35,12 +36,13 @@ void io::writeReal(const string& filename, fieldReal& arrayR, int xStep, int ySt
   //change: if input/output ever becomes advanced enough to not break completely 
   //        because of it, we should add column headers here as well.
 
-  double dx = global.lengthX/arrayR.nx, dy = global.lengthY/arrayR.ny;
+  double dx = arrayR.Lx/arrayR.nx, dy = arrayR.Ly/arrayR.ny;
   ofstream output(filename);
 
   // create file header
   int nxNew = arrayR.nx/xStep, nyNew = arrayR.ny/yStep;
-  output << "#" << nxNew << "\t" << nyNew << "\n\n";
+  output << "#" << nxNew << "\t" << nyNew << "\n";
+  output << "#" << arrayR.Lx << "\t" << arrayR.Ly << "\n\n";
 
   // fields are 1D in y direction
   if(arrayR.nx==1) {
@@ -74,4 +76,8 @@ void io::writeReal(const string& filename, fieldReal& arrayR, int xStep, int ySt
   } 
 
   output.close();
+}
+
+void io::writeReal(const string& filename, fieldReal& arrayR) {
+  io::writeReal(filename, arrayR, 1, 1);
 }

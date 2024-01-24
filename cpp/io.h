@@ -6,6 +6,7 @@
 
 namespace io {
   fieldReal readReal(const string&, int);
+  void writeReal(const string&, fieldReal&);
   void writeReal(const string&, fieldReal&, int, int);
 };
 
