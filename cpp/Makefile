@@ -4,7 +4,7 @@ default_target: main.exe
 COMPILER := g++
 CPPFLAGS := -O2 -std=c++11
 #WFLAGS   := -Wno-unused-command-line-argument -Wno-shift-count-overflow -Wno-unused-result
-OBJECTS  := fields.o io.o main.o
+OBJECTS  := fields.o io.o
 opts     :=
 
 # Current date (for backups)
@@ -86,9 +86,17 @@ main.o: header.h main.h main.cpp
 	@echo " compiling main.o ..."
 	@$(COMPILER) $(CPPFLAGS) $(LFFTW) $(opts) -c main.cpp -o main.o > error.log 2>&1
 
-main.exe: $(OBJECTS)
+main.exe: $(OBJECTS) main.o
 	@echo " compiling main.exe ..."
-	@$(COMPILER) $(CPPFLAGS) $(LFFTW) $(opts) $(OBJECTS) $(LFFTW) -o main.exe > error.log 2>&1
+	@$(COMPILER) $(CPPFLAGS) $(LFFTW) $(opts) $(OBJECTS) main.o $(LFFTW) -o main.exe > error.log 2>&1
+
+tests.o: header.h tests.h tests.cpp
+	@echo " compiling tests.o ..."
+	@$(COMPILER) $(CPPFLAGS) $(LFFTW) $(opts) -c tests.cpp -o tests.o > error.log 2>&1
+
+tests.exe: $(OBJECTS) tests.o
+	@echo " compiling tests.exe ..."
+	@$(COMPILER) $(CPPFLAGS) $(LFFTW) $(opts) $(OBJECTS) tests.o $(LFFTW) -o tests.exe > error.log 2>&1
 
 
 cln:

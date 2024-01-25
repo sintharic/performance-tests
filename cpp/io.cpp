@@ -9,19 +9,26 @@ fieldReal io::readReal(const string& filename, int column){
     terminate();
   }
 
-  int fSizeUpScale = 0;
-
   size_t nx, ny;
   double dummy, value, Lx, Ly;
   string str;
+
+  // Read Lx and Ly from the last line: 
+  configIn.seekg(-1, std::ios_base::end);
+  while (configIn.peek() == '\n') configIn.seekg(-1, std::ios_base::cur);
+  while (configIn.peek() != '\n') configIn.seekg(-1, std::ios_base::cur);
+  configIn >> Lx >> Ly;
+  // cout << "---\n" << Lx << "\t" << Ly << configIn.rdbuf() << "---\n";//DEBUG
+  configIn.seekg(0);
+
+
   char dummyChar; //used to hold the "#" character in array.old
   configIn >> dummyChar >> nx >> ny;
-  configIn >> dummyChar >> Lx >> Ly;
 
   fieldReal arrayR(nx, ny, Lx, Ly);
   for (size_t ix = 0; ix < nx; ix++){
     for (size_t iy = 0; iy < ny; iy++){
-      for (int i = 1; i < column; ++i) configIn >> dummy; // skip other columns 
+      for (int i = 0; i < column; ++i) configIn >> dummy; // skip other columns 
       configIn >> value; getline(configIn, str);
       arrayR.at(ix,iy) = value;
     }
@@ -42,7 +49,7 @@ void io::writeReal(const string& filename, fieldReal& arrayR, int xStep, int ySt
   // create file header
   int nxNew = arrayR.nx/xStep, nyNew = arrayR.ny/yStep;
   output << "#" << nxNew << "\t" << nyNew << "\n";
-  output << "#" << arrayR.Lx << "\t" << arrayR.Ly << "\n\n";
+  output << "\n";
 
   // fields are 1D in y direction
   if(arrayR.nx==1) {

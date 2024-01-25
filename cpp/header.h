@@ -5,6 +5,7 @@
 #include <string>
 #include <string.h>
 #include <vector>
+#include <map>
 #include <cmath>
 #include <complex>
 #include <numeric>
