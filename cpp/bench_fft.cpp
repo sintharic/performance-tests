@@ -1,18 +1,18 @@
-#include "main.h"
+#include "bench_fft.h"
 
-void bench_fft();
+void bench_fft(bool);
 
 int main(int argc, char const *argv[]) {
   #ifdef DEBUG
     cerr << "!!! RUNNING IN DEBUG MODE !!!\n";
   #endif
   
-  bench_fft();
+  bench_fft(false);
 
   return 0;
 }
 
-void bench_fft() {
+void bench_fft(bool write) {
   const size_t n = 1024;
   fieldReal dataRx(n,n,1.,1.);
   fieldFour dataFx(n,n,1.,1.);
@@ -32,6 +32,9 @@ void bench_fft() {
     dataFx.fromFT(dataRx);
     dataFy.fromFT(dataRy);
   }
-  // io::writeReal("triangular_wave_x.dat", dataRx);
-  // io::writeReal("triangular_wave_y.dat", dataRy);
+  if (write) {
+    io::writeReal("triangular_wave_x.dat", dataRx);
+    io::writeReal("triangular_wave_y.dat", dataRy);
+  }
+  
 }

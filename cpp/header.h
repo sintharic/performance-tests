@@ -5,11 +5,10 @@
 #include <string>
 #include <string.h>
 #include <vector>
-#include <map>
 #include <cmath>
 #include <complex>
-#include <numeric>
-#include <algorithm>
+// #include <numeric>
+// #include <algorithm>
 
 using namespace std;
 typedef complex<double> Complex;

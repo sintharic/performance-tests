@@ -18,11 +18,11 @@ function setup_memuse_tracker()
   finalizer(mem_use, tracker)
   nothing
 end
-# setup_memuse_tracker()
+#setup_memuse_tracker()
 
 
 
-function with_dummies(n::Int64 = 1024)
+function with_dummies(n::Int64 = 1024, write::Bool = false)
   nx = n
   ny = n
   nyHP1 = ny÷2+1
@@ -44,7 +44,7 @@ function with_dummies(n::Int64 = 1024)
       prefac = -prefac
     end
     dataFx[1,iq] = dataFx[1,iq] + im*prefac
-    dataFx[1,ny+2-iq] = dataFx[1,ny+1-iq] - im*prefac
+    dataFx[1,ny+2-iq] = dataFx[1,ny+2-iq] - im*prefac
     dataFy[iq,1] = dataFy[iq,1] + im*prefac
     dummyF = dataFx
     dataRx = irfft * dummyF
@@ -55,13 +55,15 @@ function with_dummies(n::Int64 = 1024)
     dataFy = rfft * dataRy
   end
 
-  # writedlm("triangular_wave_x.dat", dataRx)
-  # writedlm("triangular_wave_y.dat", dataRy)
+  if write
+    writedlm("triangular_wave_x.dat", dataRx)
+    writedlm("triangular_wave_y.dat", dataRy)
+  end
 end
 
 
 
-function without_dummies(n::Int64 = 1024)
+function without_dummies(n::Int64 = 1024, write=false)
   nx = n
   ny = n
   nyHP1 = ny÷2+1
@@ -81,7 +83,7 @@ function without_dummies(n::Int64 = 1024)
       prefac = -prefac
     end
     dataFx[1,iq] = dataFx[1,iq] + im*prefac
-    dataFx[1,ny+2-iq] = dataFx[1,ny+1-iq] - im*prefac
+    dataFx[1,ny+2-iq] = dataFx[1,ny+2-iq] - im*prefac
     dataFy[iq,1] = dataFy[iq,1] + im*prefac
     dataRx = irfft * dataFx
     dataRy = irfft * dataFy
@@ -89,11 +91,13 @@ function without_dummies(n::Int64 = 1024)
     dataFy = rfft * dataRy
   end
 
-  # writedlm("triangular_wave_x.dat", dataRx)
-  # writedlm("triangular_wave_y.dat", dataRy)
+  if write 
+    writedlm("triangular_wave_x.dat", dataRx)
+    writedlm("triangular_wave_y.dat", dataRy)
+  end
 end
 
-@time without_dummies(1024)
+# @time with_dummies(1024)
 
 # time for multiple resolutions
 # resols = (2*ones(7)) .^ LinRange(4,10,7)

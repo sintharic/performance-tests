@@ -3,6 +3,7 @@
 
 #include "header.h"
 #include "fields.h"
+#include <map>
 
 namespace io {
   fieldReal readReal(const string&, int);

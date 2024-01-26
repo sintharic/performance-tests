@@ -1,5 +1,5 @@
 SHELL = /usr/bin/env bash
-default_target: main.exe
+default_target: all
 
 COMPILER := g++
 CPPFLAGS := -O2 -std=c++11
@@ -82,13 +82,13 @@ io.o: header.h io.h io.cpp
 	@echo " compiling io.o ..."
 	@$(COMPILER) $(CPPFLAGS) $(LFFTW) $(opts) -c io.cpp -o io.o > error.log 2>&1
 
-main.o: header.h main.h main.cpp
-	@echo " compiling main.o ..."
-	@$(COMPILER) $(CPPFLAGS) $(LFFTW) $(opts) -c main.cpp -o main.o > error.log 2>&1
+bench_fft.o: header.h bench_fft.h bench_fft.cpp
+	@echo " compiling bench_fft.o ..."
+	@$(COMPILER) $(CPPFLAGS) $(LFFTW) $(opts) -c bench_fft.cpp -o bench_fft.o > error.log 2>&1
 
-main.exe: $(OBJECTS) main.o
-	@echo " compiling main.exe ..."
-	@$(COMPILER) $(CPPFLAGS) $(LFFTW) $(opts) $(OBJECTS) main.o $(LFFTW) -o main.exe > error.log 2>&1
+bench_fft.exe: $(OBJECTS) bench_fft.o
+	@echo " compiling bench_fft.exe ..."
+	@$(COMPILER) $(CPPFLAGS) $(LFFTW) $(opts) $(OBJECTS) bench_fft.o $(LFFTW) -o bench_fft.exe > error.log 2>&1
 
 tests.o: header.h tests.h tests.cpp
 	@echo " compiling tests.o ..."
@@ -98,6 +98,7 @@ tests.exe: $(OBJECTS) tests.o
 	@echo " compiling tests.exe ..."
 	@$(COMPILER) $(CPPFLAGS) $(LFFTW) $(opts) $(OBJECTS) tests.o $(LFFTW) -o tests.exe > error.log 2>&1
 
+all: tests.exe bench_fft.exe
 
 cln:
 	@rm -f *.o

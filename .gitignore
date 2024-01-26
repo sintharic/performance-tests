@@ -6,6 +6,7 @@
 *.lo
 *.o
 *.obj
+error.log
 
 # Precompiled Headers
 *.gch
@@ -34,3 +35,12 @@
 
 # Error logs
 contMech.e
+
+# Python compiler
+__pycache__
+
+# Benchmarking
+massif*
+
+# Data files
+*.dat
