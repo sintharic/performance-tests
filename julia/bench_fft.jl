@@ -39,13 +39,12 @@ function with_dummies(n::Int64 = 1024, write::Bool = false)
   for i = 0:(n/4 - 1)
     iq::Int64 = 1 + 2*i
     prefac::Float64 = 1/(iq*iq)
-    iq = iq + 1
     if (i%2 == 0) 
       prefac = -prefac
     end
-    dataFx[1,iq] = dataFx[1,iq] + im*prefac
-    dataFx[1,ny+2-iq] = dataFx[1,ny+2-iq] - im*prefac
-    dataFy[iq,1] = dataFy[iq,1] + im*prefac
+    dataFx[1,1+iq] = dataFx[1,1+iq] + im*prefac
+    dataFx[1,1+ny-iq] = dataFx[1,1+ny-iq] - im*prefac
+    dataFy[1+iq,1] = dataFy[1+iq,1] + im*prefac
     dummyF = dataFx
     dataRx = irfft * dummyF
     dummyF = dataFy
@@ -78,13 +77,12 @@ function without_dummies(n::Int64 = 1024, write=false)
   for i = 0:(n/4 - 1)
     iq::Int64 = 1 + 2*i
     prefac::Float64 = 1/(iq*iq)
-    iq = iq + 1
     if (i%2 == 0) 
       prefac = -prefac
     end
-    dataFx[1,iq] = dataFx[1,iq] + im*prefac
-    dataFx[1,ny+2-iq] = dataFx[1,ny+2-iq] - im*prefac
-    dataFy[iq,1] = dataFy[iq,1] + im*prefac
+    dataFx[1,1+iq] = dataFx[1,1+iq] + im*prefac
+    dataFx[1,1+ny-iq] = dataFx[1,1+ny-iq] - im*prefac
+    dataFy[1+iq,1] = dataFy[1+iq,1] + im*prefac
     dataRx = irfft * dataFx
     dataRy = irfft * dataFy
     dataFx = rfft * dataRx

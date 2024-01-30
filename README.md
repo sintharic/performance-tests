@@ -12,8 +12,8 @@ Computation time on MacBook Pro 2019 at N=1024:
 
 - Julia (using Intel MKL): 7.6 s
 - Julia (using FFTW): 9.0 s
-- C++: 13.2 s
-- Python: 16.2 s
+- C++: 12.6 s
+- Python: 15.5 s
 
 Memory usage (according to `top`) on MacBook Pro 2019 at N=1024:
 
@@ -31,7 +31,7 @@ Caveats
 
 Figuring out memory usage appears to be a difficult task, since it does not necessarily take all the linked libraries into account.
 While Julia and Python both provide their own internal measurement tools, C++ does not and `valgrind` does not seem to work on Mac.
-With zero overhead, given that a `double` is 8 byte and a `complex<double>` is 16 byte, I would calculate an ideal memory usage of `2*8*1024*1024 + 2*16*1024*513` = 33.6 MiB, i.e. just above 2^25 MiB.
+With zero overhead, given that a `double` is 8 byte and a `complex<double>` is 16 byte, I would calculate an ideal memory usage of `2*8*1024*1024 + 2*16*1024*513` = 33.6 MiB, i.e. just above 2^25 bytes.
 Python's internal estimate was somehow below that value.
 And the estimate reported by my tracker function in Julia was an entire order of magnitude above... 
 

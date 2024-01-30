@@ -3,6 +3,7 @@ default_target: all
 
 COMPILER := g++
 CPPFLAGS := -O2 -std=c++11
+# CPPFLAGS := -O3 -ffast-math -std=c++11
 #WFLAGS   := -Wno-unused-command-line-argument -Wno-shift-count-overflow -Wno-unused-result
 OBJECTS  := fields.o io.o
 opts     :=
